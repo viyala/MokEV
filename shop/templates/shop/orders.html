@@ -1,0 +1,85 @@
+{% extends 'shop/basic.html' %}
+
+{% block title %} Orders{% endblock title %}
+{% block orders %}style="color: var(--lightBlue)"{% endblock orders %}
+{% block css %}
+{% endblock css%}
+
+{% block body %}
+<div style="    display: flex;
+flex-direction: column;
+justify-content: center;
+padding: 1rem 10rem;
+
+">
+{% for i in allProds %}
+<div class="">
+    <div href="/shop/track-order/{{i.order_id}}" class="list-group-item productItems d-flex justify-content-between align-items-center" style="    margin-bottom: 10px;
+    padding: 1.5rem 1rem;
+    border-radius: 1rem; ">
+<a href="/shop/track-order/{{i.order_id}}" class="col-md-10" style="    display: flex;
+justify-content: space-around;
+align-items: center;">
+            <div>
+            <div class="" >
+               Order Id {{i.order_id}}
+            </div>
+            <div style="margin-top: 1rem" >
+                Rs. {{i.amount}}
+             </div>
+            </div>
+
+            <div class="col-md-7"  >
+                <div style="margin-bottom: 1rem" >
+                Dilevery Address: {{i.address}}
+                </div>
+                <div style="font-size: 1rem;">
+                    Oreder Placed on: {{i.timestamp}}
+                </div>
+            </div>
+
+            </a>
+
+            <div class="col-md-2" style="    display: flex; flex-direction: column;
+            justify-content: space-around;
+            align-items: center;">
+            {% if i.status == 'Active'  %}
+                 <div  class="cart_button " >
+                    <a onClick=cancelOrder("{{i.order_id}}") style="padding: 0.8rem 0.8rem; font-size: 0.8rem;">Cancel Order</a>
+                  </div>
+                 {% endif %}
+                 {% if i.status == 'Active' %}
+                 <div class="badge rounded-pill" style="color:#242424; background-color: var(--color3);  margin-top: 1rem" >In Progress</div>
+
+                 {% elif i.status == 'InActive'%}
+                 <div class="badge rounded-pill" style="color:white; background-color: green;" >Dilevered</div>
+
+                 {% else %}
+                 <div class="badge rounded-pill" style="color:white; background-color: #E65B65;" >Cancelled</div>
+                 {% endif %}
+            </div>
+   
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% endblock body %}
+
+{% block js %}
+<script>
+    function cancelOrder(odId){
+        Swal.fire({
+            title: 'Are you sure you want to cancel order?',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            denyButtonText: `No`,
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+              Swal.fire('Order Cancelled!', '', 'success')
+              window.location = `/shop/cancel-order/${odId}`
+            } 
+          })
+    }
+</script>
+{% endblock js %}

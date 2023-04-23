@@ -1,0 +1,53 @@
+{% extends 'blog/basic.html' %}
+
+{% block title %}Blog{% endblock title %}
+{% block blogs %}style="color: var(--lightBlue)"{% endblock blogs %}
+{% block body %}
+
+    <div class="container mt-3">
+      <div class="row my-2">
+{% for item in myposts %}
+        <div class="col-md-6">
+          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+              <strong class="d-inline-block mb-2 text-primary">{{item.head0}}</strong>
+              <h3 class="mb-0">{{item.title}}</h3>
+              <div class="mb-1 text-muted">{{item.pub_date}}</div>
+              <a href="blogpost/{{item.post_id}}" class="btn btn-outline-primary mt-5 stretched-link">Continue reading</a>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+              <img src="/media/{{item.thumbnail}}" class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"/>
+    
+            </div>
+          </div>
+        </div>
+{% if forloop.counter|divisibleby:2 %}
+      </div><div class="row my-2">
+{% endif %}
+{% endfor %}
+    </div>
+{% endblock body %}
+
+{% block js %}
+{% comment %} Find out the cart items from localStorage {% endcomment %}
+  if(localStorage.getItem('cart') == null){
+    var cart = {};
+  }
+  else{
+    cart = JSON.parse(localStorage.getItem('cart'));
+    updateCart(cart);
+  }
+
+  function updateCart(cart){
+    var sum = 0;
+    for(var item in cart){
+      sum = sum + cart[item][0]
+      document.getElementById('div' + item).innerHTML = "<button id='minus"+item+"' class='btn btn-primary minus'>-</button> <span id='val"+item+"'> "+cart[item][0]+" </span> <button id='plus"+item+"' class='btn btn-primary plus'>+</button>";
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    // Cart count
+    document.getElementById('cart').innerHTML = sum;
+    console.log(cart)
+    updatePopover(cart)
+  }
+{% endblock js %}

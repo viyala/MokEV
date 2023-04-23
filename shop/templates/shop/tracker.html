@@ -1,0 +1,139 @@
+{% extends 'shop/basic.html' %}
+
+{% block title %} Tracker {% endblock title %}
+{% block orders %}active{% endblock orders %}
+{% block trackeractive %}active{% endblock trackeractive %}
+{% block body %}
+<div style="    display: flex;
+flex-direction: column;
+justify-content: center;
+padding: 1rem 10rem;
+
+">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h2 style=" margin-bottom: 1rem;">Your Order Status</h2>
+    {% if status == 'Active'  %}
+    <div  class="cart_button " >
+        <a onClick=cancelOrder() style="padding: 1rem 1.5rem;">Cancel Order</a>
+      </div>
+    {% elif status == 'InActive' %}
+    <div class="badge rounded-pill " style="color:white; background-color: green;" >Dilevered</div>
+    {% else %}
+    <div class="badge rounded-pill " style="color:white; background-color: #E65B65; font-size: 1rem" >Cancelled</div>
+    {% endif %}
+</div>
+{% for i in tracking %}
+<div class="">
+    <a class="list-group-item productItems d-flex justify-content-between align-items-center" style="    margin-bottom: 10px;
+    padding: 1.5rem 1rem;
+    border-radius: 1rem; ">
+           
+           
+            {% if forloop.last %}
+            <div style="font-size: 1rem" >
+               {{i.update_desc}}
+             </div>
+    {% else %}
+    <div style="font-size: 1rem" >
+        <s> {{i.update_desc}}</s>
+     </div>
+    {% endif %}
+
+    <div class="badge rounded-pill" style="color:var(--white); background-color: var(--lightBlue); font-size: 1rem" >{{i.timestamp}}</div>
+    </a>
+  </div>
+{% endfor %}
+
+{% comment %} <h2 style="    margin-top: 3rem;
+margin-bottom: 1rem;" >Your Order Details</h2> {% endcomment %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;  margin-top: 3rem;">
+    <h2 style=" margin-bottom: 1rem;">Your Order Details</h2>
+    <h3  class="cart_button " >
+        Total Rs. <span id="totalprice"><span>
+        </h3>
+</div>
+<div id="items" class="list-group list-group-numbered">
+</div>
+
+
+</div>
+{% endblock body %}
+
+
+{% block js %}
+
+<script>
+ {% comment %} console.log("{{orderDetailsStr}}")
+ var myHTML= "{{orderDetailsStr}}";
+ var strippedHtml = myHTML.replace('&quot;', "'");
+ var strippedHtml = myHTML.replace('&quot;', "'");
+ console.log(strippedHtml); {% endcomment %}
+
+ function convertToPlain(html){
+
+    // Create a new div element
+    var tempDivElement = document.createElement("div");
+
+    // Set the HTML content with the given value
+    tempDivElement.innerHTML = html;
+
+    // Retrieve the text property of the element 
+    return tempDivElement.textContent || tempDivElement.innerText || "";
+}
+
+var htmlString= "{{orderDetailsStr}}";
+
+console.log(JSON.parse(convertToPlain(htmlString)));
+
+var cart = JSON.parse(convertToPlain(htmlString))
+var sum = 0;
+var totalprice = 0;
+var price = 0;
+        for (item in cart) {
+            let name = cart[item][1];
+            let img = cart[item][3];
+            let url = cart[item][4];
+            let qty = cart[item][0];
+            let itemprice = cart[item][2];
+            price = price + cart[item][2]
+            sum = sum + qty
+            totalprice = totalprice + qty * itemprice
+            mystr = `
+            <a  href="/shop/products/`+url.slice(2)+`">
+               <div class="list-group-item productItems d-flex justify-content-between align-items-center" style="margin-bottom: 10px;" >
+                    <div style="display: flex; padding: 0rem 1rem" class="ms-2 me-auto" >
+                        <div href="/shop/products/`+url.slice(2)+`" ><img style="height: 100%; widht: 20%" class="primary_img" src='`+img+`'
+                            alt="product1" /></div>
+                        <div class="ms-2 me-auto" style="    padding: 1rem 2rem;">
+                           ${name}
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span class="badge rounded-pill" style="color:var(--white); background-color: var(--lightBlue); margin: 1rem 0rem;" >${qty}</span>
+                        <div class="badge " style="color:white;margin: 1rem 0rem; " >Rs. ${itemprice}</div>
+                       </div> 
+                </div> 
+                </a>
+                `
+            $('#items').append(mystr);
+        }
+        document.getElementById('totalprice').innerHTML = price;
+
+        function cancelOrder(){
+            Swal.fire({
+                title: 'Are you sure you want to cancel order?',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                denyButtonText: `No`,
+              }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                  Swal.fire('Order Cancelled!', '', 'success')
+                  window.location = "/shop/cancel-order/{{odId}}"
+                } 
+              })
+        }
+
+</script>
+
+{% endblock js %}

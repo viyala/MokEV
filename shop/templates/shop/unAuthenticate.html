@@ -1,0 +1,20 @@
+{% extends 'shop/basic.html' %}
+
+{% block title %} Un-Authenticate{% endblock title %}
+{% comment %} {% block orders %}active{% endblock orders %} {% endcomment %}
+{% block css %}
+{% endblock css%}
+
+{% block body %}
+<div class="container">
+    <h3  style="margin: 8rem 0rem">You don't have access to thi page please 
+        <a type="button" data-toggle="modal" data-target="#loginModal" style="color: #A06B1D">
+        LogIn
+      </a>
+       or  
+      <a type="button" data-toggle="modal" data-target="#signupModal" style="color: #A06B1D">
+        SginUp
+      </a>
+       up and try again to view this page</h3>
+</div>
+{% endblock body%}

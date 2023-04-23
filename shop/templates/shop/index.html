@@ -1,0 +1,215 @@
+{% extends 'shop/basic.html' %}
+{% block title%}Best Ecommerce Website{% endblock %}
+{% block home %}style="color: var(--lightBlue)"{% endblock home %}
+{% block css %}
+body{
+  background: #FDF3F1;
+}
+.col-md-3
+{
+display: inline-block;
+margin-left:-4px;
+}
+.carousel-indicators .active {
+background-color: blue;
+}
+body .carousel-indicator li{
+background-color: blue;
+}
+body .carousel-indicators{
+bottom: -40px;
+}
+.carousel-indicators li {
+    background-color: #7270fc;
+}
+body .carousel-control-prev-icon,
+body .carousel-control-next-icon{
+background-color: blue;
+}
+
+.prevIcon{
+  position: absolute!important;
+  left: 3rem;
+}
+
+
+body .no-padding{
+padding-left: 0,
+padding-right: 0;
+}
+
+.main_product{
+  transition: transform 0.3s;
+}
+
+.main_product:hover{
+  transform: scale(1.01);
+}
+
+.heading{
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+  text-decoration: none;
+  color: "white";
+  font-size: 24px;
+  font-family: sans-serif;
+  font-weight: 500;
+}
+
+.container a:hover{
+  text-decoration: none;
+}
+
+{% endblock %}
+{% block body %}
+{% load static %}
+{% comment %} <link rel="stylesheet" href="{% static 'cssforshop.css' %}"> {% endcomment %}
+<div class="">
+   <!-- slider section starts -->
+   <div class="slider_area slider_black owl-carousel">
+    <div class="single_slider" data-bgimg="../static/images/slider/1.png">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-12">
+            <div class="slider_content">
+              <p>exclusive offer -20% off this week</p>
+              <h1>Necklace</h1>
+              <span>22 Carat gold necklace for wedding</span>
+              <p class="slider_price">
+                starting at <span>Rs. 75,999</span>
+              </p>
+              <a href="/shop/" class="button">Shop Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="single_slider" data-bgimg="../static/images/slider/2.jpg">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-12">
+            <div class="slider_content">
+              <p>exclusive offer -40% off this week</p>
+              <h1>Earings and Pendant</h1>
+              <span>Complete bridal set with white pearls</span>
+              <p class="slider_price">
+                starting at <span>Rs. 89,499</span>
+              </p>
+              <a href="/shop/" class="button">Shop Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="single_slider" data-bgimg="../static/images/slider/3.jpg">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-12">
+            <div class="slider_content">
+              <p>exclusive offer -10% off this week</p>
+              <h1>Wedding Rings</h1>
+              <span>Ashirwaad Special wedding rings for couples.</span>
+              <p class="slider_price">
+                starting at <span>Rs. 14,999</span>
+              </p>
+              <a href="/shop/" class="button">Shop Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <!--Slideshow starts here -->
+    {% for product, range, nSlides in allProds %}
+    <div style="margin: 3rem 0px;">
+    <div class="CategoryTray"> 
+      <a href="/shop/category/{{product.0.category}}"> <h3 class="heading">{{product.0.category}}</h3> </a>
+      <a href="/shop/category/{{product.0.category}}"  style="display: flex; align-items:center; justify-content: center"> <h4 class="heading">View More <span>></span></h4> </a>
+    </div>
+    
+    
+        <div id="demo{{forloop.counter}}" class="main" >
+            <div class="sliderProducts">
+                    <!--Displaying Products-->
+                    {% for i in product %}
+                    <div class="col-xs-3 col-sm-4 main_product">
+                      <div class="single_product">
+                        <div class="product_thumb">
+                          <a href="#"  ><img class="primary_img" src='/media/{{i.image}}'
+                              alt="product1" /></a>
+                              <a id="imgpr{{i.id}}" style="visibility: hidden; position: absolute" >/media/{{i.image}}</a>
+                          <div class="quick_button">
+                            <a href="/shop/products/{{i.id}}" data-placement="top"
+                              data-original-title="quick view">Quick View</a>
+                                <!--Add To Cart Button-->
+                              <a id="divpr{{i.id}}" class="divpr">
+                                <span id="pr{{i.id}}" class="cart">Add To Cart</span>
+                            </a>
+                          </div>
+                            
+                        </div>
+                        <div class="product_content">
+                          <div class="tag_cate">
+                            <a href="#">{{i.product_name|slice:"0:20"}}</a>
+                            {% comment %} <a href="#">{{i.product_name|slice:"0:20"}}</a> {% endcomment %}
+                          </div>
+                          <h3><a href="#" id="namepr{{i.id}}">{{i.subcategory|slice:"0:20"}}</a></h3>
+                          <div class="price_box">
+                            <span>Rs. </span><span class="current_price" id="pricepr{{i.id}}">{{i.price}}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+            </div>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+
+{% block js %} 
+<script>
+
+
+// Slider JS 
+const slider = document.querySelector('.sliderProducts');
+let isDown = false;
+let startX;
+let scrollLeft;
+
+slider.addEventListener('mousedown', (e) => {
+  isDown = true;
+  slider.classList.add('active');
+  startX = e.pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
+});
+slider.addEventListener('mouseleave', () => {
+  isDown = false;
+  slider.classList.remove('active');
+});
+slider.addEventListener('mouseup', () => {
+  isDown = false;
+  slider.classList.remove('active');
+});
+slider.addEventListener('mousemove', (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - slider.offsetLeft;
+  const walk = (x - startX) * 3; //scroll-fast
+  slider.scrollLeft = scrollLeft - walk;
+  console.log(walk);
+});
+   // Cart Logic
+
+   
+
+    // Add Popover to cart
+    $('#popcart').popover();
+    {% comment %} updatePopover(cart) {% endcomment %}
+   
+</script>
+{% endblock %}

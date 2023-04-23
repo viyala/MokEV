@@ -1,0 +1,155 @@
+{% extends 'shop/basic.html' %}
+
+{% block title %} {{product.product_name}} - MahavirChemist{% endblock title %}
+
+{% block css %}
+.js-image-zoom__zoomed-image{
+  {% comment %} border: 2px solid red; {% endcomment %}
+  border-radius: 10px;
+  z-index: 10;
+}
+body{
+  background: #FDF3F1;
+}
+.cart_btn{
+  width: 370px;
+  height: 46px;
+  cursor: pointer;
+  color: #fff;
+  background-color: burlywood;
+  display: inline-block;
+  font-weight: 700;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  border: none;
+  text-decoration: none;
+  padding: 5px;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  border-radius: 24px;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  /* background-color: #007bff; */
+  /* box-shadow:inset 3px 3px 6px blue,inset -3px -3px 6px black; */
+  /* box-shadow:inset 3px 3px 6px #007bff,inset -3px -3px 6px black; */
+  transition: transform .2s;
+}
+
+.cart_btn:hover{
+  outline: none;
+  transform: scale(1.01);
+  box-shadow:  3px 3px 6px black,  -3px -3px 6px #fff;
+}
+
+.cart_btn:focus{
+  outline: none;
+}
+
+.buy_photo{
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+  position: relative;
+  right: 12px;
+}
+
+{% endblock css %}
+{% block body %}
+{% load static %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="row" id="img-container" >
+                <img src="/media/{{product.image}}" class="prodImage"  alt="Loading..">
+                <a id="imgpr{{product.id}}" style="visibility: hidden; position: absolute" >/media/{{i.image}}</a>
+            </div>
+            <div class="productBtns">
+              <a id="divpr{{product.id}}" class="divpr" style=" border-radius: 1rem;">
+                <span id="pr{{product.id}}" class="cart">Add To Cart</span>
+              </a>
+              <a href="/shop/category/{{product.category}}" 
+              data-original-title="quick view" style="margin-top: 1rem; border-radius: 1rem;" >View Similar Products ></a>
+            </div>
+        </div>
+            
+        <div class="col-md-8" style="position: relative; left: 100px">
+            <h4 id="namepr{{product.id}}">{{product.product_name}}</h4>
+            <div><span>Rs. </span><h3 id="pricepr{{product.id}}">{{product.price}}</h3></div>
+            <p>{{product.desc}}</p>
+        </div>
+    </div>
+
+    <div>
+      {{product.proContent|safe}}
+    </div>
+    {% comment %} <div class="ProContent">{{product.proContent|safe}}</div> {% endcomment %}
+
+    {% comment %} Ring Size Calculator  {% endcomment %}
+    {% comment %} <div id="container">
+      <h3>Ring Size Calculator</h3>
+      <p>Adjust the circle with the size of your ring.</p>
+      <div id="ring-sizer">
+        <div id="ring" class="draggable"></div>
+      </div>
+      <div>
+        <label for="diameter">Diameter: </label>
+        <input type="number" id="diameter" readonly>
+        <span>mm</span>
+      </div>
+      <div>
+        <label for="size-slider">Size: </label>
+        <input type="range" id="size-slider" min="10" max="100" value="50">
+      </div>
+    </div> {% endcomment %}
+</div>
+
+{% endblock body %}
+
+{% block js %}
+<script>
+console.log("I am working ")
+const ringSizer = document.getElementById("ring-sizer");
+const ring = document.getElementById("ring");
+const diameterInput = document.getElementById("diameter");
+const sizeSlider = document.getElementById("size-slider");
+
+let isDragging = false;
+
+ring.addEventListener("mousedown", (e) => {
+  isDragging = true;
+});
+
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+});
+
+ringSizer.addEventListener("mousemove", (e) => {
+  if (isDragging) {
+    const x = e.offsetX;
+    const y = e.offsetY;
+    const ringSize = Math.round(Math.min(x, y) * 2);
+    const left = Math.max(Math.min(x, ringSizer.offsetWidth - ringSize / 2), ringSize / 2);
+    const top = Math.max(Math.min(y, ringSizer.offsetHeight - ringSize / 2), ringSize / 2);
+    ring.style.width = ringSize + "px";
+    ring.style.height = ringSize + "px";
+    ring.style.left = left - ringSize / 2 + "px";
+    ring.style.top = top - ringSize / 2 + "px";
+    const diameter = Math.round(ringSize * 0.8);
+    diameterInput.value = diameter;
+  }
+});
+
+sizeSlider.addEventListener("input", (e) => {
+  const size = e.target.value;
+  ring.style.width = size + "px";
+  ring.style.height = size + "px";
+  const diameter = Math.round(size * 0.8);
+  diameterInput.value = diameter;
+});
+
+
+
+
+
+</script>
+{% endblock js %}

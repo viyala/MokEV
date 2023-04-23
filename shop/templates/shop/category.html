@@ -1,0 +1,141 @@
+{% extends 'shop/basic.html' %}
+{% block title%}Best Ecommerce Website{% endblock %}
+{% block homeactive %}active{% endblock homeactive %}
+
+{% block css %}
+body{
+    background: #FDF3F1;
+}
+.catContainer{
+    display: flex;
+    flex-direction: row;
+    justifyContent: center;
+    flex-wrap: wrap;
+    margin-top: 2.35rem;
+}
+.main_product{
+    transition: transform 0.3s;
+}
+  
+.main_product:hover{
+    transform: scale(1.01);
+}
+
+.img_style{
+    width: 216px;
+    height: 216px;
+    margin: 10px;
+    object-fit: contain;
+    transition: transform 0.3s;
+}
+  
+.img_style:hover{
+    transform: scale(1.1);
+}
+
+.both_btn{
+    display: flex;
+    justify-content: space-between;
+}
+
+.divpr{
+    padding: 3px;
+    border: 1px solid black;
+    border-radius: 5px;
+    transition: transform .2s;
+}
+  
+.divpr:hover{
+    transform: scale(1.01);
+    box-shadow:  3px 3px 6px black,  -3px -3px 6px #fff;
+}
+
+.cart_photo{
+    width: 35px;
+    height: 35px;
+}
+    
+.cart_btn{
+    width: 142px;
+    height: 42px;
+    cursor: pointer;
+    color: #fff;
+    background-color: burlywood;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    border: none;
+    text-decoration: none;
+    padding: 5px;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 20px;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    /* background-color: #007bff; */
+    /* box-shadow:inset 3px 3px 6px blue,inset -3px -3px 6px black; */
+    /* box-shadow:inset 3px 3px 6px #007bff,inset -3px -3px 6px black; */
+    transition: transform .2s;
+}
+  
+.cart_btn:hover{
+    outline: none;
+    transform: scale(1.01);
+    box-shadow:  3px 3px 6px black,  -3px -3px 6px #fff;
+}
+
+.cart_btn:focus{
+    outline: none;
+}
+{% endblock css %}
+
+
+{% block body %}
+{% load static %}
+<div class="container">
+<div class="row">  
+
+{% for i in allProds %}
+<div class="col-xs-3 col-sm-4 main_product">
+    <div class="single_product">
+      <div class="product_thumb">
+        <a href="#"  ><img class="primary_img" src='/media/{{i.image}}'
+            alt="product1" /></a>
+            <a id="imgpr{{i.id}}" style="visibility: hidden; position: absolute" >/media/{{i.image}}</a>
+        {% comment %} <a href="#" class="secondary_img" style="height: 0px"><img src='/media/{{i.image}}'
+            alt="product1" /></a> {% endcomment %}
+        <div class="quick_button">
+          <a href="/shop/products/{{i.id}}" data-placement="top"
+            data-original-title="quick view">Quick View</a>
+              <!--Add To Cart Button-->
+            <a id="divpr{{i.id}}" class="divpr">
+              <span id="pr{{i.id}}" class="cart">Add To Cart</span>
+          </a>
+        </div>
+          
+      </div>
+      <div class="product_content">
+        <div class="tag_cate">
+          <a href="#">{{i.subcategory|slice:"0:20"}}</a>
+          {% comment %} <a href="#">{{i.product_name|slice:"0:20"}}</a> {% endcomment %}
+        </div>
+        <h3><a href="#" id="namepr{{i.id}}">{{i.product_name|slice:"0:20"}}</a></h3>
+        <div class="price_box">
+          {% comment %} <span class="old_price">Rs. {{i.price}}</span> {% endcomment %}
+          <span>Rs. </span><span class="current_price" id="pricepr{{i.id}}">{{i.price}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+</div>
+</div>
+
+
+{% endblock body %}
+
+
+{% block js %}
+{% endblock js %}

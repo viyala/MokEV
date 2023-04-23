@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- <script>window.location = "/shop";</script> -->
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+
+  <link rel="stylesheet" href="/static/style/index.css" />
+
+  <title>SJ-Jwelles</title>
+
+  <style>
+    {
+      % block css %
+    }
+
+      {
+      % endblock css %
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="home_black_version">
+    <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light" style="padding-left: 4rem;
+    padding-right: 3rem;"  >
+      <a class="navbar-brand" href="/" style="color: var(--blue)">SJ-Jwelles</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item ">
+            <a class="nav-link" {% block home %} {% endblock home%} href="/shop">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" {% block orders %} {% endblock orders %} href="/shop/orders">Orders</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" {% block blogs %} {% endblock blogs %} href="/blog">Blogs</a>
+          </li>
+  
+          <li class="nav-item">
+            <a class="nav-link" {% block contact %} {% endblock contact %} href="/shop/contact">Contact Us</a>
+          </li>
+
+        </ul>
+        {% comment %} <form method="get" action="/shop/search/" class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search"
+            id="search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form> {% endcomment %}
+
+      <!-- Authentication -->
+      <div class="top_right text-right">
+        <ul>
+          <li class="top_links">
+            <a href="#">My Account <i class="ion-chevron-down"></i></a>
+            <ul class="dropdown_links">
+              <!-- Authentication -->
+
+              {% if user.is_authenticated %}
+              <li><span id="welcomUser">Welcome {{request.user}}</span></li>
+              {% if user.is_superuser %}
+              <li><a href="/admin">Admin Pannel</a></li>
+              <li><a href="/shop/logout/">LogOut</a></li>
+
+              {% endif %}
+              {% else %}
+              <!-- Button to trigger Login modal -->
+              <li><a type="button" data-toggle="modal" data-target="#loginModal">
+                  LogIn
+                </a></li>
+              <!-- Button to trigger SginUp modal -->
+              <li><a type="button" data-toggle="modal" data-target="#signupModal">
+                  SginUp
+                </a></li>
+
+              {% endif %}
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      
+      <div class="search_btn">
+        <a href="#"><i class="ion-ios-search-strong"></i></a>
+        <div class="dropdown_search">
+          <form method="get" action="/shop/search/" class="form-inline my-2 my-lg-0">
+            <input type="search" placeholder="Search Product ...." aria-label="Search" name="search"
+              id="search">
+            <button type="submit" style=" color: var(--textcolor1);">
+              <i class="ion-ios-search-strong"></i>
+            </button>
+          </form>
+          <!-- <form action="#">
+            <input type="text" placeholder="Search Product ...." />
+            <button type="submit">
+              <i class="ion-ios-search-strong"></i>
+            </button> -->
+          </form>
+        </div>
+      </div>
+
+          <!-- mini cart -->
+          <div class="cart_link">
+            <a href="#"><i class="ion-android-cart"></i>
+              <span>
+                <span>Rs. </span><span class="cart_text_quantity" id="cartTotal">0</span><i
+                  class="ion-chevron-down"></i></a>
+            </span>
+            <span class="cart_quantity" id="cart">0</span>
+
+            <!-- mini cart -->
+            <div class="mini_cart">
+              <div class="cart_close">
+                <div class="cart_text">
+                  <h3>cart</h3>
+                </div>
+                <div class="mini_cart_close">
+                  <a href="javascript:void(0)"><i class="ion-android-close"></i></a>
+                </div>
+              </div>
+
+              <div id="mini_cart_update">
+
+              </div>
+
+              <div class="cart_total">
+                <span>Subtotal : </span>
+                <div><span>Rs. </span><span id="miniCartTotal">0</span></div>
+              </div>
+              <div class="mini_cart_footer">
+                <div onClick='clearCart()' class="cart_button view_cart">
+                  <a href="#">Clear Cart</a>
+                </div>
+                <div class="cart_button checkout">
+                  <a href='/shop/checkout' class="active">Checkout</a>
+                </div>
+              </div>
+              <!-- mini cart ends  -->
+            </div>
+          </div>
+      </div>
+    </nav>
+
+   {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show m-0" role="alert">
+      <strong>Message: </strong> {{ message }}
+      <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor messages %} 
+
+    {% block body %} {% endblock body %}
+
+    <!-- footer section starts -->
+    <footer class="footer_widgets footer_black">
+      <div class="container123">
+        <div class="footer_top">
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-8">
+              <div class="widgets_container contact_us">
+                <h3>About Ashirwaad</h3>
+                <div class="footer_contact">
+                  <p>Address : Ashirwaad palace, Surat, Gujarat</p>
+                  <p>
+                    Phone :
+                    <a href="tel:(+91)888888885555">(+91)888888885555</a>
+                  </p>
+                  <p>Email : ashirwaadjewlers@gmail.com</p>
+                  <ul>
+                    <li>
+                      <a href="#"><i class="ion-social-facebook"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="ion-social-twitter"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="ion-social-rss"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="ion-social-googleplus"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="ion-social-youtube"></i></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-6 col-sm-4 col-6">
+              <div class="widgets_container widget_menu">
+                <h3>Information</h3>
+                <div class="footer_menu">
+                  <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Collection</a></li>
+                    <li><a href="#">Portfolio</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-6 col-sm-5 col-6">
+              <div class="widgets_container widget_menu">
+                <h3>My Account</h3>
+                <div class="footer_menu">
+                  <ul>
+                    <li><a href="#">My Account</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Wishlist</a></li>
+                    <li><a href="#">Portfolio</a></li>
+                    <li><a href="#">Checkout</a></li>
+                    <li><a href="#">Frequently Questions</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-7">
+              <div class="widgets_container product_widget">
+                <h3>Top Rated Products</h3>
+                <div class="simple_product">
+                  <div class="simple_product_items">
+                    <div class="simple_product_thumb">
+                      <a href="#"><img src="/static/images/product/14.jpg" alt="" /></a>
+                    </div>
+                    <div class="simple_product_content">
+                      <div class="tag_cate">
+                        <a href="#">Women,</a>
+                        <a href="#">Earrings</a>
+                      </div>
+                      <div class="product_name">
+                        <h3><a href="#">Bracelet</a></h3>
+                      </div>
+                      <div class="product_price">
+                        <span class="old_price">Rs. 45612.54</span>
+                        <span class="current_price">Rs. 41612.54</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="simple_product_items">
+                    <div class="simple_product_thumb">
+                      <a href="#"><img src="/static/images/product/28.jpg" alt="" /></a>
+                    </div>
+                    <div class="simple_product_content">
+                      <div class="tag_cate">
+                        <a href="#">Women,</a>
+                        <a href="#">Earrings</a>
+                      </div>
+                      <div class="product_name">
+                        <h3><a href="#">Ring</a></h3>
+                      </div>
+                      <div class="product_price">
+                        <span class="old_price">Rs. 75612.54</span>
+                        <span class="current_price">Rs. 71612.54</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer_bottom">
+          <div class="row">
+            <div class="col-12">
+              <div class="copyright_area">
+                <p>
+                  Copyright &copy; 2020 <a href="#">ashirwaad</a> All rights
+                  Reserved.
+                </p>
+                <img src="/static/images/icon/papyel2.png" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- footer section ends -->
+
+
+    <!-- SignUp Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header" style="border-bottom: 1px solid #2D2D2D;">
+            <h4 class="modal-title" id="signupModalTitle" style="color: var(--lightBlue);">SignUp here</h4>
+            <button type="submit" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action='/shop/signup/' method='post'>
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control formFields" id="username" name="username"
+                  placeholder="Choose a unique username (Lowercase & Alphnumeric)" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">First Name</label>
+                <input type="text" class="form-control formFields" id="fname" name="fname" placeholder="First Name"
+                  required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Last Name</label>
+                <input type="text" class="form-control formFields" id="lname" name="lname" placeholder="Last Name"
+                  required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" class="form-control formFields" id="exampleInputEmail1"
+                  placeholder="name@example.com" name="email" aria-describedby="emailHelp" required>
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+              </div>
+              <div class="mb-3">
+                <label for="pass1" class="form-label">Choose a password</label>
+                <input type="password" class="form-control formFields" id="pass1" name="pass1"
+                  placeholder="Choose a password" required>
+              </div>
+              <div class="mb-3">
+                <label for="pass2" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control formFields" id="pass2" name="pass2"
+                  placeholder="Enter your password again" required>
+              </div>
+              <div style="display: flex;
+              justify-content: center;
+              margin-top: 2rem;">
+                <button type="submit" class="placeOrderBtn">Submit</button>
+              </div>
+              <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+            </form>
+          </div>
+          <div class="modal-footer" style="border-top: 1px solid #242424;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LogIn Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header" style="border-bottom: 1px solid #2D2D2D;">
+            <h4 class="modal-title" id="loginModalTitle" style="color: var(--lightBlue);">Login here</h4>
+            <button style="color: #92671C;" type="button" class="btn-close" data-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action='/shop/login/' method='POST'>
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control formFields" id="loginusername" name="loginusername"
+                  placeholder="Enter your username" required>
+              </div>
+              <div class="mb-3">
+                <label for="pass1" class="form-label">Enter your password</label>
+                <input type="password" class="form-control formFields" id="pass" name="loginpassword"
+                  placeholder="Enter your password" required>
+              </div>
+
+              <div style="display: flex;
+              justify-content: center;
+              margin-top: 2rem;">
+                <button type="submit" class="placeOrderBtn">Login</button>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer" style="border-top: 1px solid #242424;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal section ends -->
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <!-- JavaScript Bundle with Popper.js -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script src="/static/script/index.js"></script>
+
+
+  <!-- Cart Script  -->
+  <script>
+    
+// For Pop up
+{% if msg|length != 0 %}
+Swal.fire('{{msg}}', '', 'success')
+{% endif %}
+
+{% if errmsg|length != 0 %}
+Swal.fire('{{errmsg}}', '', 'error')
+{% endif %}
+
+
+    // Find out the cart items from localStorage
+    if (localStorage.getItem('cart') == null) {
+      var cart = {};
+    }
+    else {
+      cart = JSON.parse(localStorage.getItem('cart'));
+      updateCart(cart);
+    }
+
+    function clearCart() {
+      cart = JSON.parse(localStorage.getItem('cart'));
+      for (var item in cart) {
+        if (document.getElementById('div' + item)) {
+          document.getElementById('div' + item).innerHTML = '<span id="' + cart[item][4] + '" class="cart">Add to cart</span>'
+        }
+      }
+      localStorage.clear();
+      cart = {};
+      updateCart(cart)
+    }
+
+    function clearPrFromCart(id) {
+      cart = JSON.parse(localStorage.getItem('cart'));
+      if (document.getElementById('div' + id)) {
+        document.getElementById('div' + id).innerHTML = '<span id="' + cart[id][4] + '" class="cart">Add to cart</span>'
+      }
+      console.log("Values =");
+      console.log(id);
+      delete cart[id]
+      updateCart(cart)
+    }
+
+    function updateCart(cart) {
+      var sum = 0;
+      var price = 0;
+      var image = "";
+      var cartHtml = ""
+      var name = ""
+      console.log(cart);
+      for (var item in cart) {
+        sum = sum + cart[item][0]
+        let sum2 = cart[item][0]
+        name = cart[item][1]
+        price = price + cart[item][2]
+        let price2 = cart[item][2]
+        image = cart[item][3]
+        id = cart[item][4]
+        cartHtml += `<div class='cart_item'>
+                      <div class='cart_img'>
+                        <a href='/shop/products/`+ id.slice(2) + `'><img src=` + image + ` alt='' /></a>
+                      </div>
+                      <div class='cart_info'>
+                        <a href='/shop/products/`+ id.slice(2) + `'>` + name + `</a>
+                        <span class='quantity'>Qty : `+ sum2 + `</span>
+                        <span class='price_cart'>Rs. `+ price2 + `</span>
+                      </div>
+                      <div class='cart_remove'>
+                        <a href='#'><i class='ion-android-close clpr' onClick='clearPrFromCart("`+ cart[item][4] + `")' ></i></a>
+                      </div>
+                    </div>
+      `
+        if (document.getElementById('div' + item)) {
+          document.getElementById('div' + item).innerHTML = "<span id='minus" + item + "' class='minus' style='font-size: 1.3rem;'>-</span> <span id='val" + item + "'> " + cart[item][0] + " </span> <span id='plus" + item + "' class='plus' style='font-size: 1.3rem;' >+</span>";
+        }
+      }
+      cartHtml += `
+      
+      `
+
+      localStorage.setItem('cart', JSON.stringify(cart));
+      // Cart count
+      document.getElementById('cart').innerHTML = sum;
+      document.getElementById('cartTotal').innerHTML = price;
+      document.getElementById('miniCartTotal').innerHTML = price;
+      document.getElementById('mini_cart_update').innerHTML = cartHtml;
+      //console.log(cart)
+      // updatePopover(cart)
+
+    }
+
+    // If the add to cart button is clicked, add or increment the item
+    $('.divpr').on('click', 'span.cart', function () {
+      //console.log('clicked');
+      var idstr = this.id.toString();
+      //console.log(idstr);
+      if (cart[idstr] != undefined) {
+        qty = cart[idstr][0] + 1;
+        price = cart[idstr][2] + document.getElementById('price' + idstr).innerHTML;
+      }
+      else {
+        let qty = 1;
+        let name = document.getElementById('name' + idstr).innerHTML;
+        let price = document.getElementById('price' + idstr).innerHTML;
+        let imgUrl = document.getElementById('img' + idstr).innerHTML;
+        console.log(price)
+        cart[idstr] = [qty, name, parseInt(price), imgUrl, idstr];
+      }
+      updateCart(cart)
+
+    });
+
+    // If plus or minus button is clicked, change the cart as well as the display value
+    $('.divpr').on("click", "span.minus", function () {
+      a = this.id.slice(5,);
+      cart[a][0] = cart[a][0] - 1;
+      cart[a][2] = cart[a][2] - parseInt(document.getElementById('price' + a).innerHTML);
+      cart[a][0] = Math.max(0, cart[a][0])
+      if (cart[a][0] == 0) {
+        document.getElementById('div' + a).innerHTML = '<span id="' + a + '" class="cart">Add to cart</span>'
+        delete cart[a]
+      }
+      else {
+        document.getElementById('val' + a).innerHTML = cart[a][0]
+      }
+      updateCart(cart)
+    });
+    $('.divpr').on("click", "span.plus", function () {
+      a = this.id.slice(4,);
+      cart[a][0] = cart[a][0] + 1;
+      cart[a][2] = cart[a][2] + parseInt(document.getElementById('price' + a).innerHTML);
+      document.getElementById('val' + a).innerHTML = cart[a][0]
+      updateCart(cart)
+    });
+
+  </script>
+
+  {% block js %} {% endblock js %}
+</body>
+
+</html>
